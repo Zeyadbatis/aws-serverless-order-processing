@@ -1,1 +1,17 @@
-#.gitignore
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfplan
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Secrets
+.env
+.env.*
