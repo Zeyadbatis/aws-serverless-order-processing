@@ -6,6 +6,7 @@ variable "aws_region" {
 
 variable "bucket_name" {
   default = "static_website"
+  type    = string
 }
 #lambda
 
@@ -16,3 +17,10 @@ variable "api_http_method" {
   default     = "POST"
   description = "Method to trigger Lambda through API Gateway"
 }
+
+variable "domain_name" {
+  default     = "zeyadbatis.com"
+  description = "domain name"
+  type        = string
+}
+

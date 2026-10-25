@@ -18,12 +18,21 @@ terraform {
   }
 }
 
+locals {
+  s3_origin_id = "s3-${aws_s3_bucket.first_bucket.id}"
+
+
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
 }
 
 provider "aws" {
-
   region = "ap-southeast-2"
 }
 
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+}
