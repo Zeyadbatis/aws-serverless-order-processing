@@ -34,29 +34,90 @@ resource "aws_api_gateway_integration" "integration" {
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
-  depends_on = [aws_api_gateway_integration.integration]
+  rest_api_id = aws_api_gateway_rest_api.lambda_api.id
+
+  depends_on = [
+    aws_api_gateway_integration.integration,
+    aws_api_gateway_integration.options,
+    aws_api_gateway_method_response.options,
+    aws_api_gateway_integration_response.options
+  ]
 
   triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.resource.id,
+
+      # POST configuration
       aws_api_gateway_method.method.id,
-      aws_api_gateway_integration.integration.id
+      aws_api_gateway_integration.integration.id,
+
+      # CORS OPTIONS configuration
+      aws_api_gateway_method.options.id,
+      aws_api_gateway_integration.options.id,
+      aws_api_gateway_method_response.options.id,
+      aws_api_gateway_integration_response.options.id
     ]))
   }
 
   lifecycle {
     create_before_destroy = true
   }
-
-
-  rest_api_id = aws_api_gateway_rest_api.lambda_api.id
-
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.lambda_api.id
-  stage_name    = "example"
+  stage_name    = "prod"
 }
 
+
+# Handle the browser's CORS preflight request
+resource "aws_api_gateway_method" "options" {
+  rest_api_id   = aws_api_gateway_rest_api.lambda_api.id
+  resource_id   = aws_api_gateway_resource.resource.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+# Return a successful response without invoking Lambda
+resource "aws_api_gateway_integration" "options" {
+  rest_api_id = aws_api_gateway_rest_api.lambda_api.id
+  resource_id = aws_api_gateway_resource.resource.id
+  http_method = aws_api_gateway_method.options.http_method
+  type        = "MOCK"
+
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+}
+
+resource "aws_api_gateway_method_response" "options" {
+  rest_api_id = aws_api_gateway_rest_api.lambda_api.id
+  resource_id = aws_api_gateway_resource.resource.id
+  http_method = aws_api_gateway_method.options.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+  }
+}
+
+resource "aws_api_gateway_integration_response" "options" {
+  rest_api_id = aws_api_gateway_rest_api.lambda_api.id
+  resource_id = aws_api_gateway_resource.resource.id
+  http_method = aws_api_gateway_method.options.http_method
+  status_code = aws_api_gateway_method_response.options.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'https://zeyadbatis.com'"
+    "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
+  }
+
+  depends_on = [
+    aws_api_gateway_integration.options
+  ]
+}
 
