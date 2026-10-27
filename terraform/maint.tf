@@ -19,8 +19,9 @@ terraform {
 }
 
 locals {
-  s3_origin_id = "s3-${aws_s3_bucket.first_bucket.id}"
-
+  s3_origin_id   = "s3-${aws_s3_bucket.first_bucket.id}"
+  allowed_origin = "https://${var.domain_name}"
+  api_url        = "${aws_api_gateway_stage.api_stage.invoke_url}/orders"
 
 }
 

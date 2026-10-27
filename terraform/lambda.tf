@@ -18,7 +18,7 @@ resource "aws_lambda_function" "submitting_order_function" {
 
     variables = {
       QUEUE_URL      = aws_sqs_queue.sqs.url
-      ALLOWED_ORIGIN = "https://${var.domain_name}"
+      ALLOWED_ORIGIN = local.allowed_origin
     }
   }
 

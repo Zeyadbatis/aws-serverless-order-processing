@@ -111,7 +111,7 @@ resource "aws_api_gateway_integration_response" "options" {
   status_code = aws_api_gateway_method_response.options.status_code
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = "'https://zeyadbatis.com'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'${local.allowed_origin}'"
     "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
   }
