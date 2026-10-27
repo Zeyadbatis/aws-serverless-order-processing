@@ -1,10 +1,10 @@
 import json
 import boto3
+import os
 from datetime import datetime, timezone
 
 dynamodb = boto3.resource('dynamodb')
-table_name = 'orders'
-table = dynamodb.Table(table_name)
+table = dynamodb.Table(os.environ['DYNAMODB_TABLE_NAME'])
 
 
 def lambda_handler(event, context):

@@ -1,12 +1,14 @@
 import json
 import boto3
+import os
 
 sqs = boto3.client('sqs')
-queue_url = 'https://sqs.ap-southeast-2.amazonaws.com/449126594288/sqs'
+queue_url = os.environ['QUEUE_URL']
+allowed_origin = os.environ['ALLOWED_ORIGIN']
 
 def lambda_handler(event, context):
     headers = {
-        'Access-Control-Allow-Origin': 'https://zeyadbatis.com',
+        'Access-Control-Allow-Origin': allowed_origin,
         'Access-Control-Allow-Headers': 'Content-Type',
         'Access-Control-Allow-Methods': 'OPTIONS,POST'
     }
