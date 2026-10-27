@@ -12,6 +12,8 @@ resource "aws_lambda_function" "submitting_order_function" {
   role             = aws_iam_role.submitting_role.arn
   handler          = "SubmitOrderFunction.lambda_handler"
   source_code_hash = data.archive_file.submitting_order.output_base64sha256
+  timeout          = var.lambda_timeout
+  memory_size      = var.lambda_memory_size
   runtime          = "python3.12"
 
   environment {
@@ -37,6 +39,8 @@ resource "aws_lambda_function" "processing_order_function" {
   role             = aws_iam_role.processing_role.arn
   handler          = "ProcessOrderFunction.lambda_handler"
   source_code_hash = data.archive_file.processing_order.output_base64sha256
+  timeout          = var.lambda_timeout
+  memory_size      = var.lambda_memory_size
   runtime          = "python3.12"
 
 

@@ -5,10 +5,21 @@ variable "aws_region" {
 }
 
 variable "bucket_name" {
-  default = "static_website"
+  default = "static-website-zeyad-2026"
   type    = string
 }
 #lambda
+variable "lambda_timeout" {
+  type        = number
+  default     = 10
+  description = "lambda timeout in seconds"
+}
+variable "lambda_memory_size" {
+  type        = number
+  default     = 128
+  description = "size of lambda memory in MB"
+
+}
 
 #API_GateWay
 
