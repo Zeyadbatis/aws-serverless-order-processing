@@ -8,7 +8,7 @@ A fully serverless order system on AWS, built entirely with Terraform. A custome
 
 ## Architecture
 
-![Architecture diagram](docs/architecture_digram.png)
+![Architecture diagram](docs/architecture_digram.jpeg)
 
 ```mermaid
 flowchart LR
