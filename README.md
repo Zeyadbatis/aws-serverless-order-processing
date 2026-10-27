@@ -8,7 +8,10 @@ A fully serverless order system on AWS, built entirely with Terraform. A custome
 
 ## Architecture
 
-![Architecture diagram](docs/architecture_digram.jpeg)
+![Architecture diagram](docs/architecture-diagram.png)
+
+<details>
+<summary>Editable Mermaid version</summary>
 
 ```mermaid
 flowchart LR
@@ -21,6 +24,8 @@ flowchart LR
     SQS -->|event source mapping| L2[Lambda: processing_order_function]
     L2 -->|PutItem| DDB[(DynamoDB: orders)]
 ```
+
+</details>
 
 ### How an order flows
 
