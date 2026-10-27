@@ -6,8 +6,6 @@ A fully serverless order system on AWS, built entirely with Terraform. A custome
 
 ## Architecture
 
-## Architecture
-
 ![Architecture diagram](docs/architecture-diagram.png)
 
 <details>
